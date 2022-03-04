@@ -3,23 +3,12 @@ import numpy as np
 
 
 header, rows = RawData()
-
 # LPrint(rows, 0, 10)
-# print (rows[1][0])
 
 rain_tomorrow = [el[0] for el in rows]
-print (rain_tomorrow)
-# arr = np.array([])
-# new_arr = np.append(arr, 10)
 
-# print('New Array: ', new_arr)
+rain_tomorrow_arr = np.array(rain_tomorrow)
+yes_num = np.count_nonzero(rain_tomorrow_arr == 'Yes') 
 
-# data_len = len(rows)
-# cnt = 0
-# for i in range(data_len):
-#     # print(rows[i][0])
-#     if rows[i][0] == 'No':
-#         # print('test')
-#         cnt = cnt + 1 
+print (yes_num)
 
-# print(cnt)
