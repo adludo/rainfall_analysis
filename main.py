@@ -1,5 +1,10 @@
-from functions import raw_data
+from functions import *
+
 
 
 header, rows = raw_data()
-print(header)
+
+lprint(rows, 0, 10)
+
+
+
