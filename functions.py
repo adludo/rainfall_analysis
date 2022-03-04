@@ -1,5 +1,17 @@
 import csv
 
+# Get data for a certain city
+def CityData(city, rs):
+    sub_data = []
+    for r in rs:
+        if r[2] == city:
+            sub_data.append(r)
+    return sub_data
+
+# Get the unique locations
+def LocationData(rs):
+    location = [el[2] for el in rs]
+    return location
 
 # Import csv data and separate into header and rows
 def RawData():
