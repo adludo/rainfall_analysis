@@ -3,6 +3,36 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Add the Weight of Evidence into the pivot table summarising the data
+def CalculatingWoe (df, field, q):
+    exp_w_arr = []
+    n_arr = []
+    n = len(df.index)
+    m_test = df.rain_tomorrow.value_counts().reset_index(name='Counts')
+    m = m_test.iloc[1].Counts
+    # print('test')
+    p_table = BinnedRainCond(df, field, q) # pivot table
+    # print('test2')
+    for i in range(q):
+        yes_val = p_table.iloc[i].Yes
+        no_val = p_table.iloc[i].No
+
+        n_val = yes_val + no_val
+        m_val = yes_val
+
+        frac1 = m_val/m
+        frac2 = (n - m)/(n_val - m_val)
+        print(frac2)
+        exp_w_val = frac1 * frac2
+        exp_w_arr.append(exp_w_val)
+
+    p_table['exp_w'] = exp_w_arr
+    w_arr = np.log(p_table.iloc[:,2].values)
+    # print (p_table.iloc[:,2].values)
+    p_table['weight_of_evidence'] = w_arr
+    # print(p_table)
+    return p_table
+
 # Plot the distribution by whether it rains tomorrow
 def PlotByRainTomorrow (df, field):
     # ax = df.hist(column = 'humidity_3pm', bins=12, alpha=0.5)
@@ -14,21 +44,31 @@ def PlotByRainTomorrow (df, field):
 
 # Create binned dataframe pivot table for whether it rains or not
 def BinnedRainCond (df, field, bins):
-    df, bin_name = BinnedDataField (df, field, bins) 
+    # print('new_test')
+    df, bn = BinnedDataField (df, field, bins) 
+    # print('new_test2')
     df['count'] = 1
     result = df.pivot_table(
-        index=[bin_name], columns='rain_tomorrow', values='count',
+        index=[bn], columns='rain_tomorrow', values='count',
         fill_value=0, aggfunc=np.sum
     )
+    print(result)
     return result
 
 # Include binned field in dataframe 
 # Q1b
 def BinnedDataField (df, field, bins):
+    # print('hi')
     bin_range = FRange(bins)
+    # print(bin_range)
     bn = field + '_binned'
-    df[bn] = pd.qcut(df[field], \
-        q=bin_range, \
+    # print(df)
+    # df[bn] = pd.qcut(df[field], \
+    #     q=bin_range, \
+    #     # labels=['A', 'B', 'C', 'D', 'E'] \
+    # )
+    df[bn] = pd.cut(df[field], \
+        bins, \
         # labels=['A', 'B', 'C', 'D', 'E'] \
     )
     # print(df)

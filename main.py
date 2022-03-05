@@ -3,11 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-source = pd.read_csv("rainfall_prediction_data.csv")
-
-# Question1a()
-# Question1av2()
-
 # Different selection fields 
 # rain_tomorrow        
 # date      
@@ -18,15 +13,16 @@ source = pd.read_csv("rainfall_prediction_data.csv")
 # sunshine  
 # humidity_3pm  
 # pressure_3pm 
-# humidity_3pm_binned
 
-# result, bins = BinnedDataField(source, 'humidity_3pm', 7)
-p_table = BinnedRainCond(source, 'humidity_3pm', 7)
+# Code starts here
+source = pd.read_csv("rainfall_prediction_data.csv")
+q = 5 # number of bins
 
-print(p_table.iloc[1].Yes)
+# Question1a()
+# Question1av2()
 
-# print(result['humidity_3pm_binned'].value_counts())
-# result = BinnedDataField(source, 'humidity_3pm', 7)
-# PlotByRainTomorrow (source, 'evaporation')
+pw_table = CalculatingWoe(source, 'rainfall', q)
+
+# PlotByRainTomorrow (source, 'pressure_3pm')
 
 # print(result.iloc[0])
