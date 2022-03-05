@@ -32,7 +32,8 @@ def HeaderData(hdr, rs): # header, row data
         # print (r)
         # if r[col] == hdr:
         sub_data.append(r[col])
-    return sub_data
+    sub_data_arr = np.array(sub_data)
+    return sub_data_arr
 
 
 # Get data for a certain city
@@ -43,7 +44,7 @@ def CityData(city, rs):
             sub_data.append(r)
     return sub_data
 
-# Get the unique locations
+# Get all locations, can later use to get unique
 def LocationData(rs):
     location = [el[2] for el in rs]
     return location
