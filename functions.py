@@ -7,6 +7,13 @@ def Question1(rs):
     yes_num = np.count_nonzero(rain_tom_arr == 'Yes') 
     return yes_num
 
+# Get the data under a certain header with 'NA's and as floats
+def CleanedHeaderDataF(hdr, rs): # header, row data
+    clnhdrdat = HeaderData(hdr, rs)
+    new_arr = np.delete(clnhdrdat, np.where(clnhdrdat == 'NA'))
+    new_arr_f = new_arr.astype(np.float)
+    return new_arr_f
+
 # Get the data under a certain header
 def HeaderData(hdr, rs): # header, row data
     if hdr == 'rain_tomorrow':
