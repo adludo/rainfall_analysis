@@ -1,24 +1,20 @@
 from functions import *
 import numpy as np
 
-
 header, rows = RawData()
-# LPrint(rows, 0, 10)
+# ## Question 1a
+# answer1 = Question1(rows)
+# print (answer1)
 
-rain_tomorrow = [el[0] for el in rows]
-location = LocationData(rows)
-
-rain_tomorrow_arr = np.array(rain_tomorrow)
-location_arr = np.array(location)
-
-unq_locations = np.unique(location_arr)
-
-this_city = CityData('Darwin', rows)
-
-print(this_city)
+humidity_data = HeaderData('humidity_3pm', rows)
 
 
-# yes_num = np.count_nonzero(rain_tomorrow_arr == 'Yes') 
+# print(humidity_data[:10])
+# print (header)
+# print('Row data', rows[:10])
+
+
+# HeaderData(hdr, rs)
 
 # print (len(unq_locations))
 

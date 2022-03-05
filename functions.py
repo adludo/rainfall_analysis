@@ -1,4 +1,39 @@
 import csv
+import numpy as np
+# Answer Q1
+def Question1(rs):
+    rain_tom = [el[0] for el in rs]
+    rain_tom_arr = np.array(rain_tom)
+    yes_num = np.count_nonzero(rain_tom_arr == 'Yes') 
+    return yes_num
+
+# Get the data under a certain header
+def HeaderData(hdr, rs): # header, row data
+    if hdr == 'rain_tomorrow':
+        col = 0
+    elif hdr == 'date':
+            col = 1
+    elif hdr == 'location':
+            col = 2
+    elif hdr == 'min_temp':
+            col = 3
+    elif hdr == 'rainfall':
+            col = 4
+    elif hdr == 'evaporation':
+            col = 5
+    elif hdr == 'sunshine':
+            col = 6
+    elif hdr == 'humidity_3pm':
+            col = 7
+    elif hdr == 'pressure_3pm':
+            col = 8
+    sub_data = []
+    for r in rs:
+        # print (r)
+        # if r[col] == hdr:
+        sub_data.append(r[col])
+    return sub_data
+
 
 # Get data for a certain city
 def CityData(city, rs):
