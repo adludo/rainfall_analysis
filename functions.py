@@ -1,33 +1,59 @@
 import csv
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
-# Create binned dataframe
-def BinnedRainCond (df, field, bins):
-    test_range = range(bins)
-    quotients = [number / len(test_range) for number in test_range]
-    quotients.append(1)
-
-    bin_name = field + '_binned'
-    df[bin_name] = pd.qcut(df[field], \
-        q=quotients, \
-        # labels=['A', 'B', 'C', 'D', 'E'] \
+# Plot the distribution by whether it rains tomorrow
+def PlotByRainTomorrow (df, field):
+    # ax = df.hist(column = 'humidity_3pm', bins=12, alpha=0.5)
+    ax = df.hist(column = field, \
+        by='rain_tomorrow', \
+        figsize=(5, 4) \
     )
+    plt.show()
 
+# Create binned dataframe pivot table for whether it rains or not
+def BinnedRainCond (df, field, bins):
+    df, bin_name = BinnedDataField (df, field, bins) 
     df['count'] = 1
-    print (df)
     result = df.pivot_table(
         index=[bin_name], columns='rain_tomorrow', values='count',
         fill_value=0, aggfunc=np.sum
     )
-
     return result
 
-# Answer Q1
-def Question1(rs):
-    rain_tom = [el[0] for el in rs]
+# Include binned field in dataframe 
+# Q1b
+def BinnedDataField (df, field, bins):
+    bin_range = FRange(bins)
+    bn = field + '_binned'
+    df[bn] = pd.qcut(df[field], \
+        q=bin_range, \
+        # labels=['A', 'B', 'C', 'D', 'E'] \
+    )
+    # print(df)
+    return df, bn
+
+# Create a floating range for bins in the dataframe
+def FRange(n):
+    test_range = range(n)
+    quotients = [number / len(test_range) for number in test_range]
+    quotients.append(1)
+    return quotients
+
+# Answer Q1a with pandas
+def Question1av2():
+    data = pd.read_csv("rainfall_prediction_data.csv")
+    print(data.rain_tomorrow.value_counts().reset_index(name='Counts'))
+    return
+
+# Answer Q1a no pandas
+def Question1a():
+    header, rows = RawData()
+    rain_tom = [el[0] for el in rows]
     rain_tom_arr = np.array(rain_tom)
     yes_num = np.count_nonzero(rain_tom_arr == 'Yes') 
+    print (yes_num)
     return yes_num
 
 # Get the data under a certain header with 'NA's and as floats
@@ -74,7 +100,7 @@ def CityData(city, rs):
             sub_data.append(r)
     return sub_data
 
-# Get all locations, can later use to get unique
+# Get all locations, can later use to get unique locations
 def LocationData(rs):
     location = [el[2] for el in rs]
     return location
