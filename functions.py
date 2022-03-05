@@ -2,6 +2,27 @@ import csv
 import numpy as np
 import pandas as pd
 
+# Create binned dataframe
+def BinnedRainCond (df, field, bins):
+    test_range = range(bins)
+    quotients = [number / len(test_range) for number in test_range]
+    quotients.append(1)
+
+    bin_name = field + '_binned'
+    df[bin_name] = pd.qcut(df[field], \
+        q=quotients, \
+        # labels=['A', 'B', 'C', 'D', 'E'] \
+    )
+
+    df['count'] = 1
+    print (df)
+    result = df.pivot_table(
+        index=[bin_name], columns='rain_tomorrow', values='count',
+        fill_value=0, aggfunc=np.sum
+    )
+
+    return result
+
 # Answer Q1
 def Question1(rs):
     rain_tom = [el[0] for el in rs]
