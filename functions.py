@@ -1,5 +1,7 @@
 import csv
 import numpy as np
+import pandas as pd
+
 # Answer Q1
 def Question1(rs):
     rain_tom = [el[0] for el in rs]
