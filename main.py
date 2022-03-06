@@ -16,12 +16,12 @@ import pandas as pd
 
 # Code starts here
 source = pd.read_csv("rainfall_prediction_data.csv")
-q = 5 # number of bins
+q = 7 # number of bins
 
 # Question1a()
 # Question1av2()
 
-pw_table = CalculatingWoe(source, 'rainfall', q)
+pw_table = CalculatingWoe(source, 'humidity_3pm', q)
 
 # PlotByRainTomorrow (source, 'pressure_3pm')
 

@@ -22,7 +22,7 @@ def CalculatingWoe (df, field, q):
 
         frac1 = m_val/m
         frac2 = (n - m)/(n_val - m_val)
-        print(frac2)
+        # print(frac2)
         exp_w_val = frac1 * frac2
         exp_w_arr.append(exp_w_val)
 
@@ -30,7 +30,7 @@ def CalculatingWoe (df, field, q):
     w_arr = np.log(p_table.iloc[:,2].values)
     # print (p_table.iloc[:,2].values)
     p_table['weight_of_evidence'] = w_arr
-    # print(p_table)
+    print(p_table)
     return p_table
 
 # Plot the distribution by whether it rains tomorrow
@@ -55,23 +55,34 @@ def BinnedRainCond (df, field, bins):
     print(result)
     return result
 
-# Include binned field in dataframe 
-# Q1b
-def BinnedDataField (df, field, bins):
-    # print('hi')
-    bin_range = FRange(bins)
-    # print(bin_range)
+# Using qcut to create bins
+def BinQcut (df, field, bins):
     bn = field + '_binned'
     # print(df)
-    # df[bn] = pd.qcut(df[field], \
-    #     q=bin_range, \
-    #     # labels=['A', 'B', 'C', 'D', 'E'] \
-    # )
+    bin_range = FRange(bins)
+    df[bn] = pd.qcut(df[field], \
+        q=bin_range, \
+        # labels=['A', 'B', 'C', 'D', 'E'] \
+    )
+    return df, bn
+
+# Using cut to create bins
+def BinCut (df, field, bins):
+    bn = field + '_binned'
+    
     df[bn] = pd.cut(df[field], \
         bins, \
         # labels=['A', 'B', 'C', 'D', 'E'] \
     )
-    # print(df)
+    return df, bn
+
+# Include binned field in dataframe 
+# Q1b
+def BinnedDataField (df, field, bins):
+    print ('bug_test')
+    df, bn = BinQcut(df, field, bins) # BIN USING QCUT
+    # df, bn = BinCut(df, field, bins) # BIN USING CUT
+    # print ('bug_test2')
     return df, bn
 
 # Create a floating range for bins in the dataframe
