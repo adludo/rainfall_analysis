@@ -57,11 +57,15 @@ def CalculatingWoe (df, field, q):
     return p_table
 
 # Plot the distribution by whether it rains tomorrow
-def PlotByRainTomorrow (df, field):
+def PlotByRainTomorrow (df, field, q):
     # ax = df.hist(column = 'humidity_3pm', bins=12, alpha=0.5)
+    # plt.title(field)
+    plt.figure
     ax = df.hist(column = field, \
-        by='rain_tomorrow', \
-        figsize=(5, 4) \
+        by = 'rain_tomorrow', \
+        figsize = (5, 4), \
+        bins = q, \
+        alpha = 0.5
     )
     plt.show()
 
@@ -166,7 +170,6 @@ def HeaderData(hdr, rs): # header, row data
         sub_data.append(r[col])
     sub_data_arr = np.array(sub_data)
     return sub_data_arr
-
 
 # Get data for a certain city
 def CityData(city, rs):
