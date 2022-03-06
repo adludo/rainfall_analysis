@@ -18,6 +18,7 @@ import pandas as pd
 source = pd.read_csv("rainfall_prediction_data.csv")
 interested_field = 'pressure_3pm'
 q = 20 # number of bins - 1
+rows_tot = len(source.index)
 
 # Question1a()
 # Question1av2()
@@ -28,5 +29,8 @@ iv_final = pw_table['iv_nosum'].sum()
 print(iv_final)
 
 PlotByRainTomorrow (source, interested_field, q)
+
+# data_nans = source.isna().sum()
+# print(type(data_nans))
 
 # print(result.iloc[0])

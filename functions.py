@@ -40,7 +40,7 @@ def CalculatingWoe (df, field, q):
     m_test = df.rain_tomorrow.value_counts().reset_index(name='Counts')
     m = m_test.iloc[1].Counts
     # print('test')
-    p_table = BinnedRainCond(df, field, q) # pivot table
+    p_table = BinnedRainCond(df, field, q) # pivot table with yes and no
     # print('test2')
 
     # Calculating the exponential weight of evidence to then take log
@@ -58,9 +58,6 @@ def CalculatingWoe (df, field, q):
 
 # Plot the distribution by whether it rains tomorrow
 def PlotByRainTomorrow (df, field, q):
-    # ax = df.hist(column = 'humidity_3pm', bins=12, alpha=0.5)
-    # plt.title(field)
-    plt.figure
     ax = df.hist(column = field, \
         by = 'rain_tomorrow', \
         figsize = (5, 4), \
