@@ -22,6 +22,7 @@ q = 6 # number of bins
 # Question1av2()
 
 pw_table = CalculatingWoe(source, 'humidity_3pm', q)
+print (pw_table)
 
 # PlotByRainTomorrow (source, 'pressure_3pm')
 

@@ -2,9 +2,14 @@ import csv
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import math
 
-# Calculation of exp_w_i
+# Calculation of exp_w_i and IV
+# Q1d & Q2
 def CalculatingExpW(p_table, exp_w_arr, m, n, q):
+    iv_array_nosum = []
+    iv_array = []
+
     for i in range(q):
         # print(i)
         yes_val = p_table.iloc[i].Yes
@@ -20,9 +25,16 @@ def CalculatingExpW(p_table, exp_w_arr, m, n, q):
         # print('error?')
         exp_w_arr.append(exp_w_val)
         # print('error2?')
-    return exp_w_arr
 
-# Add the Weight of Evidence into the pivot table summarising the data
+        # Calculate IV here?
+        iv_val_nosum = (frac1 - (1/frac2)) * math.log(exp_w_val)
+        iv_array_nosum.append(iv_val_nosum)
+        iv_array.append(sum(iv_array_nosum))
+
+    return exp_w_arr, iv_array_nosum, iv_array
+
+# Add the Weight of Evidence and Information Value into the pivot table summarising the data
+# Q1d & Q2
 def CalculatingWoe (df, field, q):
     # Initiating variables
     exp_w_arr = []
@@ -35,14 +47,17 @@ def CalculatingWoe (df, field, q):
     # print('test2')
 
     # Calculating the exponential weight of evidence to then take log
-    exp_w_arr = CalculatingExpW(p_table, exp_w_arr, m, n, q)
+    exp_w_arr, iv_array_nosum, iv_array = CalculatingExpW(p_table, exp_w_arr, m, n, q)
 
     p_table['exp_w'] = exp_w_arr
+    p_table['iv_nosum'] = iv_array_nosum
+    p_table['iv_sum'] = iv_array
+
     exp_w_col = p_table.columns.get_loc('exp_w')
     w_arr = np.log(p_table.iloc[:,exp_w_col].values)
     # print (p_table.iloc[:,2].values)
     p_table['weight_of_evidence'] = w_arr
-    print(p_table)
+    # print(p_table)
     return p_table
 
 # Plot the distribution by whether it rains tomorrow
@@ -55,6 +70,7 @@ def PlotByRainTomorrow (df, field):
     plt.show()
 
 # Create binned dataframe pivot table for whether it rains or not
+# Q1c 
 def BinnedRainCond (df, field, bins):
     # print('new_test')
     df, bn = BinnedDataField (df, field, bins) 
@@ -64,7 +80,7 @@ def BinnedRainCond (df, field, bins):
         index=[bn], columns='rain_tomorrow', values='count',
         fill_value=0, aggfunc=np.sum
     )
-    print(result)
+    # print(result)
     return result
 
 # Using qcut to create bins
@@ -90,15 +106,15 @@ def BinCut (df, field, bin_num):
     return df, bn
 
 # Include binned field in dataframe 
-# Q1b
+# Q1b 
 def BinnedDataField (df, field, bins):
     print ('bug_test')
-    # df, bn = BinQcut(df, field, bins) # BIN USING QCUT
-    df, bn = BinCut(df, field, bins) # BIN USING CUT
+    df, bn = BinQcut(df, field, bins) # BIN USING QCUT
+    # df, bn = BinCut(df, field, bins) # BIN USING CUT
     # print ('bug_test2')
     return df, bn
 
-# Create a floating range for bins in the dataframe
+# Create a floating range by % for bins in the dataframe
 def FRange(n):
     test_range = range(n)
     quotients = [number / len(test_range) for number in test_range]
