@@ -12,6 +12,9 @@ Run 'python3 main.py' to display a table summarising the data in a dataframe
 
 ### Issues ###
 NaNs not investigated yet
+
 Binning issue with certain fields
+
 Location specific information not investigated yet
+
 plotting with Dataframe.hist is a bit annoying
