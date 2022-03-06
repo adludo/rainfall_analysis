@@ -3,17 +3,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Add the Weight of Evidence into the pivot table summarising the data
-def CalculatingWoe (df, field, q):
-    exp_w_arr = []
-    n_arr = []
-    n = len(df.index)
-    m_test = df.rain_tomorrow.value_counts().reset_index(name='Counts')
-    m = m_test.iloc[1].Counts
-    # print('test')
-    p_table = BinnedRainCond(df, field, q) # pivot table
-    # print('test2')
+# Calculation of exp_w_i
+def CalculatingExpW(p_table, exp_w_arr, m, n, q):
     for i in range(q):
+        # print(i)
         yes_val = p_table.iloc[i].Yes
         no_val = p_table.iloc[i].No
 
@@ -24,10 +17,29 @@ def CalculatingWoe (df, field, q):
         frac2 = (n - m)/(n_val - m_val)
         # print(frac2)
         exp_w_val = frac1 * frac2
+        # print('error?')
         exp_w_arr.append(exp_w_val)
+        # print('error2?')
+    return exp_w_arr
+
+# Add the Weight of Evidence into the pivot table summarising the data
+def CalculatingWoe (df, field, q):
+    # Initiating variables
+    exp_w_arr = []
+    n_arr = []
+    n = len(df.index)
+    m_test = df.rain_tomorrow.value_counts().reset_index(name='Counts')
+    m = m_test.iloc[1].Counts
+    # print('test')
+    p_table = BinnedRainCond(df, field, q) # pivot table
+    # print('test2')
+
+    # Calculating the exponential weight of evidence to then take log
+    exp_w_arr = CalculatingExpW(p_table, exp_w_arr, m, n, q)
 
     p_table['exp_w'] = exp_w_arr
-    w_arr = np.log(p_table.iloc[:,2].values)
+    exp_w_col = p_table.columns.get_loc('exp_w')
+    w_arr = np.log(p_table.iloc[:,exp_w_col].values)
     # print (p_table.iloc[:,2].values)
     p_table['weight_of_evidence'] = w_arr
     print(p_table)
@@ -63,15 +75,16 @@ def BinQcut (df, field, bins):
     df[bn] = pd.qcut(df[field], \
         q=bin_range, \
         # labels=['A', 'B', 'C', 'D', 'E'] \
+        # duplicates= 'drop', \
     )
     return df, bn
 
 # Using cut to create bins
-def BinCut (df, field, bins):
+def BinCut (df, field, bin_num):
     bn = field + '_binned'
-    
+    print (bin_num)
     df[bn] = pd.cut(df[field], \
-        bins, \
+        bin_num, \
         # labels=['A', 'B', 'C', 'D', 'E'] \
     )
     return df, bn
@@ -80,8 +93,8 @@ def BinCut (df, field, bins):
 # Q1b
 def BinnedDataField (df, field, bins):
     print ('bug_test')
-    df, bn = BinQcut(df, field, bins) # BIN USING QCUT
-    # df, bn = BinCut(df, field, bins) # BIN USING CUT
+    # df, bn = BinQcut(df, field, bins) # BIN USING QCUT
+    df, bn = BinCut(df, field, bins) # BIN USING CUT
     # print ('bug_test2')
     return df, bn
 

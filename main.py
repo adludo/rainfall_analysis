@@ -16,7 +16,7 @@ import pandas as pd
 
 # Code starts here
 source = pd.read_csv("rainfall_prediction_data.csv")
-q = 7 # number of bins
+q = 6 # number of bins
 
 # Question1a()
 # Question1av2()
