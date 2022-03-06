@@ -16,13 +16,15 @@ import pandas as pd
 
 # Code starts here
 source = pd.read_csv("rainfall_prediction_data.csv")
-q = 6 # number of bins
+q = 10 # number of bins - 1
 
 # Question1a()
 # Question1av2()
 
 pw_table = CalculatingWoe(source, 'humidity_3pm', q)
 print (pw_table)
+iv_final = pw_table['iv_nosum'].sum()
+print(iv_final)
 
 # PlotByRainTomorrow (source, 'pressure_3pm')
 

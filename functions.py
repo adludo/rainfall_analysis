@@ -8,8 +8,6 @@ import math
 # Q1d & Q2
 def CalculatingExpW(p_table, exp_w_arr, m, n, q):
     iv_array_nosum = []
-    iv_array = []
-
     for i in range(q):
         # print(i)
         yes_val = p_table.iloc[i].Yes
@@ -29,9 +27,8 @@ def CalculatingExpW(p_table, exp_w_arr, m, n, q):
         # Calculate IV here?
         iv_val_nosum = (frac1 - (1/frac2)) * math.log(exp_w_val)
         iv_array_nosum.append(iv_val_nosum)
-        iv_array.append(sum(iv_array_nosum))
 
-    return exp_w_arr, iv_array_nosum, iv_array
+    return exp_w_arr, iv_array_nosum
 
 # Add the Weight of Evidence and Information Value into the pivot table summarising the data
 # Q1d & Q2
@@ -47,11 +44,10 @@ def CalculatingWoe (df, field, q):
     # print('test2')
 
     # Calculating the exponential weight of evidence to then take log
-    exp_w_arr, iv_array_nosum, iv_array = CalculatingExpW(p_table, exp_w_arr, m, n, q)
+    exp_w_arr, iv_array_nosum = CalculatingExpW(p_table, exp_w_arr, m, n, q)
 
     p_table['exp_w'] = exp_w_arr
     p_table['iv_nosum'] = iv_array_nosum
-    p_table['iv_sum'] = iv_array
 
     exp_w_col = p_table.columns.get_loc('exp_w')
     w_arr = np.log(p_table.iloc[:,exp_w_col].values)
